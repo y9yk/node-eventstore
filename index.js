@@ -1,15 +1,15 @@
-var Eventstore = require('./lib/eventstore'),
-  Base = require('./lib/base'),
-  _ = require('lodash'),
-  debug = require('debug')('eventstore'),
-  StoreEventEmitter = require('./lib/storeEventEmitter');
+var Eventstore = require("./lib/eventstore"),
+  Base = require("./lib/base"),
+  _ = require("lodash"),
+  debug = require("debug")("eventstore"),
+  StoreEventEmitter = require("./lib/storeEventEmitter");
 
 function exists(toCheck) {
-  var _exists = require('fs').existsSync || require('path').existsSync;
-  if (require('fs').accessSync) {
+  var _exists = require("fs").existsSync || require("path").existsSync;
+  if (require("fs").accessSync) {
     _exists = function (toCheck) {
       try {
-        require('fs').accessSync(toCheck);
+        require("fs").accessSync(toCheck);
         return true;
       } catch (e) {
         return false;
@@ -22,7 +22,7 @@ function exists(toCheck) {
 function getSpecificStore(options) {
   options = options || {};
 
-  options.type = options.type || 'inmemory';
+  options.type = options.type || "inmemory";
 
   if (_.isFunction(options.type)) {
     return options.type;
@@ -43,14 +43,21 @@ function getSpecificStore(options) {
     var db = require(dbPath);
     return db;
   } catch (err) {
-
-    if (err.message.indexOf('Cannot find module') >= 0 &&
+    if (
+      err.message.indexOf("Cannot find module") >= 0 &&
       err.message.indexOf("'") > 0 &&
-      err.message.lastIndexOf("'") !== err.message.indexOf("'")) {
-
-      var moduleName = err.message.substring(err.message.indexOf("'") + 1, err.message.lastIndexOf("'"));
-      var msg = 'Please install module "' + moduleName +
-        '" to work with db implementation "' + options.type + '"!';
+      err.message.lastIndexOf("'") !== err.message.indexOf("'")
+    ) {
+      var moduleName = err.message.substring(
+        err.message.indexOf("'") + 1,
+        err.message.lastIndexOf("'")
+      );
+      var msg =
+        'Please install module "' +
+        moduleName +
+        '" to work with db implementation "' +
+        options.type +
+        '"!';
       console.log(msg);
       debug(msg);
     }
@@ -59,7 +66,7 @@ function getSpecificStore(options) {
   }
 }
 
-module.exports = function(options) {
+module.exports = function (options) {
   options = options || {};
 
   var Store;
